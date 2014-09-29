@@ -31,9 +31,9 @@ define(function(require) {
 		setupSequence: function() {
 			this.model.set({
 				_currentStageIndex: 0,
+				_lastStageAnswered: -1,
 				_correctAnswers: 0,
 				_incorrectAnswers: 0,
-				_currentAnswer: undefined,
 			});
 
 			this.setupSequenceIndicators();
@@ -103,7 +103,7 @@ define(function(require) {
 		},
 
 		userDidInteract: function() {
-			return this.model.get("_currentAnswer") === this.model.get("_currentStageIndex");
+			return this.model.get("_lastStageAnswered") === this.model.get("_currentStageIndex");
 		},
 
 		markAnswer: function(userDidInteract) {
@@ -191,8 +191,8 @@ define(function(require) {
 		onAnswerClicked: function(event) {
 			if (event) event.preventDefault();
 
-			if (this.model.get("_currentAnswer") == this.model.get("_currentStageIndex")) return;
-			this.model.set("_currentAnswer", this.model.get("_currentStageIndex"));
+			if (this.model.get("_lastStageAnswered") == this.model.get("_currentStageIndex")) return;
+			this.model.set("_lastStageAnswered", this.model.get("_currentStageIndex"));
 			this.stopTimer();
 			this.endCurrentStage();
 		},
