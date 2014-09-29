@@ -7,16 +7,16 @@ define(function(require) {
 	var TimedSequence = QuestionView.extend({
 
 		events: {
-	            "click .sequence-start-button":"onStartClicked",
-	            "click .sequence-answer-button":"onAnswerClicked"
+			"click .sequence-start-button":"onStartClicked",
+			"click .sequence-answer-button":"onAnswerClicked"
 		},
-	
+
 		preRender:function(){
-	            QuestionView.prototype.preRender.apply(this);
-	            this.listenTo(Adapt, 'device:changed', this.handleDeviceChanged);
-	            this.listenTo(Adapt, 'device:resize', this.handleDeviceResize);
+			QuestionView.prototype.preRender.apply(this);
+			this.listenTo(Adapt, 'device:changed', this.handleDeviceChanged);
+			this.listenTo(Adapt, 'device:resize', this.handleDeviceResize);
 		},
-	
+
 		postRender: function() {
 			QuestionView.prototype.postRender.apply(this);
 			this.$('.timed-sequence-widget').imageready(_.bind(function() {
@@ -24,12 +24,12 @@ define(function(require) {
 				this.setupSequence();
 				this.setReadyStatus();
 			}, this));
-	
+
 			this.userAnswersArray = [];
 			this.model.set({
 				_userAnswers:this.userAnswersArray
 			});
-	    
+
 			// removed so timed sequence resets left incase we need to go back
 			//if(!this.model.get("_isComplete")) {
 			//    this.userAnswersArray = [];
@@ -40,15 +40,15 @@ define(function(require) {
 			//    this.showCompletedState();
 			//}
 		},
-	
+
 		handleDeviceChanged: function() {
 			this.setupLayout();
 		},
-	
+
 		handleDeviceResize: function() {
 			this.setupLayout();
 		},
-	
+
 		setupLayout: function() {
 			this.width = this.$(".sequence-container").width();
 			this.$(".sequence-container-inner").css({
@@ -58,21 +58,21 @@ define(function(require) {
 				width:this.width
 			});
 		},
-	
+
 		setupSequence: function() {
 			this.setupSequenceIndicators();
 			this.correctAnswers = 0;
 			this.incorrectAnswers = 0;
 			this.currentAnswer;
 		},
-	
+
 		setupSequenceIndicators: function() {
 			var itemsLength = this.model.get("_items").length
 			this.$(".sequence-indicator").css({
 				width:(100 / itemsLength) + "%"
 			});
 		},
-	
+
 		onStartClicked: function(event) {
 			if (event) event.preventDefault();
 			this.$(".sequence-state-container").velocity({
@@ -87,7 +87,7 @@ define(function(require) {
 			this.startTimer();
 			this.updateIndicator();
 		},
-	
+
 		onAnswerClicked: function(event) {
 			if (event) event.preventDefault();
 			if (this.currentAnswer == this.stage) {
@@ -97,18 +97,18 @@ define(function(require) {
 			this.stopTimer();
 			this.endCurrentStage();
 		},
-	
+
 		startTimer:function() {
 			var timerInterval = this.model.get("_timerInterval") * 1000;
 			this.timer = setInterval(_.bind(function() {
 				this.updateSequence();
 			},this), timerInterval);
 		},
-	
+
 		stopTimer: function() {
 			clearInterval(this.timer);
 		},
-	
+
 		updateSequence: function() {
 			this.checkUserAnswer();
 			if (this.stage == this.model.get("_items").length - 1) {
@@ -117,7 +117,7 @@ define(function(require) {
 				this.showNextImage();
 			}
 		},
-	
+
 		showNextImage: function() {
 			this.stage++;
 			this.$('.sequence-container-inner').velocity({
@@ -125,7 +125,7 @@ define(function(require) {
 			});
 			this.updateIndicator();
 		},
-	
+
 		updateIndicator: function() {
 			var timerInterval = this.model.get("_timerInterval") * 1000;
 			var $indicator = this.$(".sequence-indicator").eq(this.stage);
@@ -134,7 +134,7 @@ define(function(require) {
 				width:"100%"
 			}, timerInterval);
 		},
-	
+
 		endSequence: function() {
 			var that = this;
 			this.stopTimer();
@@ -143,46 +143,46 @@ define(function(require) {
 			this.$(".sequence-complete-button").addClass("show");
 			this.$(".sequence-state-container").velocity("reverse", function() {
 				that.readyForMarking();
-	            	});
+			});
 		},
-	
+
 		readyForMarking: function() {
 			if (this.isCorrect()) {
 				this.onQuestionCorrect();
 			} else {
-				this.onQuestionIncorrect(); 
+				this.onQuestionIncorrect();
 			}
-	
+
 			this.setCompletionStatus();
 			this.showFeedback();
 		},
-	
+
 		isCorrect: function() {
 			return this.correctAnswers == this.model.get("_items").length;
 		},
-	
+
 		isPartlyCorrect: function() {
 			return this.incorrectAnswers <= this.model.get("_answerLeniency");
 		},
-	
+
 		checkUserAnswer: function() {
 			var userDidInteract = this.checkUserInteraction();
 			var answer = this.markAnswer(userDidInteract);
-	
+
 			var userAnswer = {
 				_isCorrect:answer
 			};
-	
+
 			this.userAnswersArray.push(userAnswer);
 			this.model.set({
 				_userAnswers:this.userAnswersArray
 			});
-	
+
 			this.updateAnswerCounters(answer);
 			this.showIndicatorMarking();
 			this.showSequenceFeedback(userAnswer);
 		},
-	
+
 		checkUserInteraction: function() {
 			if (this.currentAnswer == this.stage) {
 				return true;
@@ -190,7 +190,7 @@ define(function(require) {
 				return false;
 			}
 		},
-	
+
 		markAnswer: function(userDidInteract) {
 			var shouldBeSelected = this.model.get("_items")[this.stage]._shouldBeSelected;
 			if (userDidInteract) {
@@ -207,7 +207,7 @@ define(function(require) {
 				}
 			}
 		},
-	
+
 		updateAnswerCounters: function(answer) {
 			if(answer) {
 				this.correctAnswers++;
@@ -215,7 +215,7 @@ define(function(require) {
 				this.incorrectAnswers++;
 			}
 		},
-	
+
 		showIndicatorMarking: function() {
 			_.each(this.model.get("_userAnswers"), _.bind(function(item, index) {
 				var $indicator = this.$(".sequence-indicator").eq(index);
@@ -226,7 +226,7 @@ define(function(require) {
 				}
 			}, this));
 		},
-	
+
 		showSequenceFeedback: function(userAnswer) {
 			var $feedbackContainer = this.$(".sequence-feedback-container");
 			var $feedbackIcon;
@@ -237,17 +237,17 @@ define(function(require) {
 			}
 			this.animateFeedbackIcon($feedbackIcon);
 		},
-	
+
 		animateFeedbackIcon: function($element) {
-			$element.velocity({ 
-				opacity: 1 
+			$element.velocity({
+					opacity: 1
 			}, 50, function() {
-				$element.velocity({ 
+				$element.velocity({
 					opacity: 0
 				}, 500);
 			});
-	        },
-	
+        },
+
 		endCurrentStage: function() {
 			this.checkUserAnswer();
 			var $indicator = this.$(".sequence-indicator").eq(this.stage);
@@ -257,7 +257,7 @@ define(function(require) {
 				this.startFromNextStage();
 			}, this));
 		},
-	
+
 		startFromNextStage: function() {
 			if (this.stage == this.model.get("_items").length - 1) {
 				this.endSequence();
@@ -266,7 +266,7 @@ define(function(require) {
 				this.startTimer();
 			}
 		},
-	
+
 		showCompletedState: function() {
 			this.$(".sequence-state-container").addClass("complete");
 			this.$(".sequence-answer-button, .sequence-start-button").removeClass("show");
