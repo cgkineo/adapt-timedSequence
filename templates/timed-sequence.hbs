@@ -1,0 +1,38 @@
+<div class="timed-sequence-inner component-inner">
+    {{> component this}}
+    <div class="timed-sequence-widget component-widget {{#unless _isEnabled}} disabled {{#if _isComplete}} complete submitted user {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
+        <div class="sequence-container">
+            <div class="sequence-container-inner clearfix">
+            {{#each _items}}
+            <img class="sequence-image" src="{{_graphic.src}}" alt="{{_graphic.alt}}" title="{{_graphic.title}}"/>
+            {{/each}}
+            </div>
+            <div class="sequence-feedback-container">
+                <div class="sequence-feedback-icon icon icon-tick"></div>
+                <div class="sequence-feedback-icon icon icon-cross"></div>
+            </div>
+            <div class="sequence-state-container">
+                <img class="sequence-start-image" src="{{_startGraphic.src}}" alt="{{_startGraphic.alt}}" title="{{_startGraphic.title}}"/>
+                <img class="sequence-end-image" src="{{_endGraphic.src}}" alt="{{_endGraphic.alt}}" title="{{_endGraphic.title}}"/>
+            </div>
+        </div>
+        <div class="sequence-indicators">
+            <div class="sequence-indicators-inner clearfix">
+                {{#each _items}}
+                <div class="sequence-indicator">
+                    <div class="sequence-indicator-inner"></div>
+                    <div class="sequence-indicator-icon icon icon-tick"></div>
+                    <div class="sequence-indicator-icon icon icon-cross"></div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="sequence-controls">
+            <div class="sequence-controls-inner clearfix">
+                <a href="#" class="sequence-start-button button show">{{_controls.start}}</a>
+                <a href="#" class="sequence-answer-button button">{{_controls.answer}}</a>
+                <div class="sequence-complete-button button disabled">{{_controls.complete}}</div>
+            </div>
+        </div>
+    </div>
+</div>

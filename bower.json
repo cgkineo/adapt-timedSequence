@@ -1,0 +1,15 @@
+{
+  "name": "adapt-timed-sequence",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    ""
+  ],
+  "description": "",
+  "main": "/js/adapt-timed-sequence.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-component"
+  ],
+  "license": "GPLv3"
+}

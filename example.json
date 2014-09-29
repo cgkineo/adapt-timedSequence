@@ -1,0 +1,81 @@
+{
+	"_id": "c-101",
+	"_parentId": "b-61",
+	"_type": "component",
+	"_component": "timed-sequence",
+	"_classes": "",
+	"_layout": "left",
+	"title": "Timed sequence",
+	"displayTitle": "Timed sequence",
+	"body": "Body text",
+	"instruction": "Press start to begin. When the sequence has started press the ID button if the person in the image requires ID. Correct answers are image two and four.",
+	"_questionWeight": 1,
+	"_timerInterval": 3,
+	"_answerLeniency":1,
+	"_startGraphic": {
+		"src": "course/en/images/start-image.jpg",
+		"alt": "",
+		"title": ""
+	},
+	"_endGraphic": {
+		"src": "course/en/images/end-image.jpg",
+		"alt": "",
+		"title": ""
+	},
+	"_controls": {
+		"start": "Start",
+		"answer": "ID",
+		"complete": "Completed!"
+	},
+	"_items": [
+		{
+			"_shouldBeSelected": false,
+			"_graphic": {
+				"src": "course/en/images/first-image.jpg",
+				"alt": "",
+				"title": ""
+			}
+		},
+		{
+			"_shouldBeSelected": true,
+			"_graphic": {
+				"src": "course/en/images/second-image.jpg",
+				"alt": "",
+				"title": ""
+			}
+		},
+		{
+			"_shouldBeSelected": false,
+			"_graphic": {
+				"src": "course/en/images/third-image.jpg",
+				"alt": "",
+				"title": ""
+			}
+		},
+		{
+			"_shouldBeSelected": true,
+			"_graphic": {
+				"src": "course/en/images/fourth-image.jpg",
+				"alt": "",
+				"title": ""
+			}
+		},
+		{
+			"_shouldBeSelected": false,
+			"_graphic": {
+				"src": "course/en/images/fifth-image.jpg",
+				"alt": "",
+				"title": ""
+			}
+		}
+	],
+	"_feedback": {
+		"correct": "Correct feedback.",
+		"_partlyCorrect": {
+			"final": "Partly correct feedback."
+		},
+		"_incorrect": {
+			"final": "Incorrect feedback."
+		}
+	}
+}
