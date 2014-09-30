@@ -56,8 +56,7 @@ define(function(require) {
 		updateSequence: function() {
 			this.checkUserAnswer();
 
-			var atLastStage = this.model.get("_currentStageIndex") == this.model.get("_items").length-1;
-			if (atLastStage) this.endSequence();
+			if (this.atLastStage()) this.endSequence();
 			else this.showNextImage();
 		},
 
@@ -145,8 +144,7 @@ define(function(require) {
 		},
 
 		startFromNextStage: function() {
-			var atLastStage = this.model.get("_currentStageIndex") == this.model.get("_items").length-1;
-			if (atLastStage) {
+			if (this.atLastStage()) {
 				this.endSequence();
 			}
 			else {
@@ -161,6 +159,9 @@ define(function(require) {
 			this.$(".sequence-complete-button").addClass("show");
 			this.$(".sequence-indicator-inner").css("width", "100%");
 			this.showIndicatorMarking();
+
+		atLastStage: function() {
+			return this.model.get("_currentStageIndex") == this.model.get("_items").length-1;
 		},
 
 		/**
