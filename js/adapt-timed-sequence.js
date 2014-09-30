@@ -202,8 +202,6 @@ define(function(require) {
 
 			this.updateAttempts();
 			this.setQuestionAsSubmitted();
-			this.storeUserAnswer();
-			this.markQuestion();
 			this.setScore();
 			this.setupFeedback();
 			this.showFeedback();
