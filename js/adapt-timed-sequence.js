@@ -35,7 +35,7 @@ define(function(require) {
 
 		resetData: function() {
 			this.model.set({
-				_userAnswers: new Backbone.Collection(),
+				_userAnswers: [],
 				_currentStageIndex: 0,
 				_lastStageAnswered: -1,
 				_correctAnswers: 0,
@@ -50,6 +50,7 @@ define(function(require) {
 
 		stopTimer: function() {
 			clearInterval(this.timer);
+			this.timer = -1;
 		},
 
 		updateSequence: function() {
@@ -64,13 +65,13 @@ define(function(require) {
 			var leftMarg = -(this.model.get("_currentStageIndex") * this.width);
 			this.$(".sequence-container-inner").velocity({ marginLeft: leftMarg + "px" });
 			this.updateIndicator();
+
+			if(this.timer === -1) this.startTimer();
 		},
 
-		updateIndicator: function() {
-			var timerInterval = this.model.get("_timerInterval")*1000;
+		endCurrentStage: function() {
 			var $indicator = this.$(".sequence-indicator").eq(this.model.get("_currentStageIndex"));
-			var $indicatorInner = $indicator.children(".sequence-indicator-inner");
-			$indicatorInner.animate({ width:"100%" }, timerInterval);
+			$indicator.children(".sequence-indicator-inner").stop().animate({ width:"100%" }, 500, _.bind(this.updateSequence, this));
 		},
 
 		endSequence: function() {
@@ -91,8 +92,18 @@ define(function(require) {
 				_isCorrect:correctInteraction
 			});
 
+			if(correctInteraction) this.model.set("_correctAnswers", this.model.get("_correctAnswers")+1);
+			else this.model.set("_incorrectAnswers", this.model.get("_incorrectAnswers")+1);
+
 			this.showIndicatorMarking();
 			this.showSequenceFeedback(this.model.get("_userAnswers")[index]);
+		},
+
+		updateIndicator: function() {
+			var timerInterval = this.model.get("_timerInterval")*1000;
+			var $indicator = this.$(".sequence-indicator").eq(this.model.get("_currentStageIndex"));
+			var $indicatorInner = $indicator.children(".sequence-indicator-inner");
+			$indicatorInner.animate({ width:"100%" }, timerInterval);
 		},
 
 		showIndicatorMarking: function() {
@@ -116,30 +127,8 @@ define(function(require) {
 			});
         },
 
-		endCurrentStage: function() {
-			this.markAnswer(this.model.get("_currentStageIndex"));
-			var $indicator = this.$(".sequence-indicator").eq(this.model.get("_currentStageIndex"));
-			$indicator.children(".sequence-indicator-inner").stop().animate({ width:"100%" }, 500, _.bind(this.startFromNextStage, this));
-		},
-
-		startFromNextStage: function() {
-			if (this.atLastStage()) {
-				this.endSequence();
-			}
-			else {
-				this.showNextImage();
-				this.startTimer();
-			}
-		},
-
-		getAnswerTally: function() {
-			// update tally
-			if(correctInteraction) this.model.set("_correctAnswers", this.model.get("_correctAnswers")+1);
-			else this.model.set("_incorrectAnswers", this.model.get("_incorrectAnswers")+1);
-		},
-
 		isCorrect: function() {
-			return this.model.get("_correctAnswers") == this.model.get("_items").length;
+			return this.model.get("_correctAnswers") === this.model.get("_items").length;
 		},
 
 		isPartlyCorrect: function() {
@@ -189,11 +178,10 @@ define(function(require) {
 		},
 
 		onQuestionComplete: function() {
-			console.log("------------------------------>");
 			this.setCompletionStatus();
-
 			this.updateAttempts();
 			this.setQuestionAsSubmitted();
+			this.markQuestion();
 			this.setScore();
 			this.setupFeedback();
 			this.showFeedback();
