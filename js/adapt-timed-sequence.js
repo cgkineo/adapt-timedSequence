@@ -28,20 +28,19 @@ define(function(require) {
 			this.$(".sequence-image").css("width", this.width);
 		},
 
-		setupSequence: function() {
+		setupSequenceIndicators: function() {
+			var itemsLength = this.model.get("_items").length
+			this.$(".sequence-indicator").css("width", (100/itemsLength) + "%");
+		},
+
+		resetData: function() {
 			this.model.set({
+				_userAnswers: new Backbone.Collection(),
 				_currentStageIndex: 0,
 				_lastStageAnswered: -1,
 				_correctAnswers: 0,
 				_incorrectAnswers: 0,
 			});
-
-			this.setupSequenceIndicators();
-		},
-
-		setupSequenceIndicators: function() {
-			var itemsLength = this.model.get("_items").length
-			this.$(".sequence-indicator").css("width", (100/itemsLength) + "%");
 		},
 
 		startTimer: function() {
@@ -54,7 +53,7 @@ define(function(require) {
 		},
 
 		updateSequence: function() {
-			this.checkUserAnswer();
+			this.markAnswer(this.model.get("_currentStageIndex"));
 
 			if (this.atLastStage()) this.endSequence();
 			else this.showNextImage();
@@ -82,38 +81,18 @@ define(function(require) {
 			this.$(".sequence-state-container").velocity("reverse", _.bind(this.onQuestionComplete, this));
 		},
 
-		isCorrect: function() {
-			return this.model.get("_correctAnswers") == this.model.get("_items").length;
-		},
-
-		isPartlyCorrect: function() {
-			return this.model.get("_incorrectAnswers") <= this.model.get("_answerLeniency");
-		},
-
-		checkUserAnswer: function() {
-			var isCorrect = this.markAnswer(this.userDidInteract());
-			var userAnswer = { _isCorrect:isCorrect };
-
-			this.model.get("_userAnswers").push(userAnswer);
-
-			this.updateAnswerCounters(isCorrect);
-			this.showIndicatorMarking();
-			this.showSequenceFeedback(userAnswer);
-		},
-
-		userDidInteract: function() {
-			return this.model.get("_lastStageAnswered") === this.model.get("_currentStageIndex");
-		},
-
-		markAnswer: function(userDidInteract) {
-			var shouldBeSelected = this.model.get("_items")[this.model.get("_currentStageIndex")]._shouldBeSelected;
+		markAnswer: function(index) {
+			var userDidInteract = this.userDidInteract();
+			var shouldBeSelected = this.model.get("_items")[index]._shouldBeSelected;
 			var correctInteraction = (userDidInteract && shouldBeSelected) || (!userDidInteract && !shouldBeSelected);
-			return correctInteraction;
-		},
 
-		updateAnswerCounters: function(isCorrect) {
-			if(isCorrect) this.model.set("_correctAnswers", this.model.get("_correctAnswers")+1);
-			else this.model.set("_incorrectAnswers", this.model.get("_incorrectAnswers"));
+			this.model.get("_userAnswers").push({
+				_stageID: index,
+				_isCorrect:correctInteraction
+			});
+
+			this.showIndicatorMarking();
+			this.showSequenceFeedback(this.model.get("_userAnswers")[index]);
 		},
 
 		showIndicatorMarking: function() {
@@ -138,7 +117,7 @@ define(function(require) {
         },
 
 		endCurrentStage: function() {
-			this.checkUserAnswer();
+			this.markAnswer(this.model.get("_currentStageIndex"));
 			var $indicator = this.$(".sequence-indicator").eq(this.model.get("_currentStageIndex"));
 			$indicator.children(".sequence-indicator-inner").stop().animate({ width:"100%" }, 500, _.bind(this.startFromNextStage, this));
 		},
@@ -153,12 +132,23 @@ define(function(require) {
 			}
 		},
 
-		showCompletedState: function() {
-			this.$(".sequence-state-container").addClass("complete");
-			this.$(".sequence-answer-button, .sequence-start-button").removeClass("show");
-			this.$(".sequence-complete-button").addClass("show");
-			this.$(".sequence-indicator-inner").css("width", "100%");
-			this.showIndicatorMarking();
+		getAnswerTally: function() {
+			// update tally
+			if(correctInteraction) this.model.set("_correctAnswers", this.model.get("_correctAnswers")+1);
+			else this.model.set("_incorrectAnswers", this.model.get("_incorrectAnswers")+1);
+		},
+
+		isCorrect: function() {
+			return this.model.get("_correctAnswers") == this.model.get("_items").length;
+		},
+
+		isPartlyCorrect: function() {
+			return this.model.get("_incorrectAnswers") <= this.model.get("_answerLeniency");
+		},
+
+		userDidInteract: function() {
+			return this.model.get("_lastStageAnswered") === this.model.get("_currentStageIndex");
+		},
 
 		atLastStage: function() {
 			return this.model.get("_currentStageIndex") == this.model.get("_items").length-1;
@@ -172,9 +162,9 @@ define(function(require) {
 		onDeviceResized: function() { this.setupLayout(); },
 
 		onWidgetImageReady: function() {
-			this.model.set("_userAnswers", []);
+			this.resetData();
 			this.setupLayout();
-			this.setupSequence();
+			this.setupSequenceIndicators();
 			this.setReadyStatus();
 		},
 
@@ -199,6 +189,7 @@ define(function(require) {
 		},
 
 		onQuestionComplete: function() {
+			console.log("------------------------------>");
 			this.setCompletionStatus();
 
 			this.updateAttempts();
