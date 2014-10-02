@@ -125,8 +125,8 @@ define(function(require) {
 			$element.velocity({ opacity: 1 }, 50, function() {
 				$element.velocity({ opacity: 0 }, 500);
 			});
-        },
-
+		},
+		
 		isCorrect: function() {
 			return this.model.get("_correctAnswers") === this.model.get("_items").length;
 		},
