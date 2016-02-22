@@ -1,15 +1,17 @@
 {
-  "name": "adapt-timed-sequence",
-  "version": "0.0.1",
-  "homepage": "",
-  "authors": [
-    ""
-  ],
-  "description": "",
-  "main": "/js/adapt-timed-sequence.js",
-  "keywords": [
-    "adapt-plugin",
-    "adapt-component"
-  ],
-  "license": "GPLv3"
+    "name": "adapt-timedSequence",
+    "repository": "git://github.com/cgkineo/adapt-timedSequence",
+    "framework": "^2.0.0",
+    "version": "2.0.0",
+    "homepage": "https://github.com/cgkineo/adapt-timedSequence",
+    "issues": "https://github.com/cgkineo/adapt-timedSequence/issues/",
+    "displayName": "Timed Sequence",
+    "component": "timedSequence",
+    "description": "Question component which behaves similarly to a hazard perception test; displays a collection of images with a single button for interaction. ",
+    "main": "/js/adapt-timed-sequence.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-component"
+    ],
+    "license": "GPLv3"
 }
