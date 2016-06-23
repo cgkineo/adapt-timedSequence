@@ -1,5 +1,5 @@
 {
-    "_id": "c-10",
+    "_id": "c-05",
     "_parentId": "b-05",
     "_type": "component",
     "_component": "timed-sequence",
@@ -13,12 +13,12 @@
     "_timerInterval": 3,
     "_answerLeniency": 1,
     "_startGraphic": {
-        "src": "assets/start-image.jpg",
+        "src": "course/en/images/c-05-start.jpg",
         "alt": "",
         "title": ""
     },
     "_endGraphic": {
-        "src": "assets/end-image.jpg",
+        "src": "course/en/images/c-05-end.jpg",
         "alt": "",
         "title": ""
     },
@@ -31,7 +31,7 @@
         {
             "_shouldBeSelected": false,
             "_graphic": {
-                "src": "assets/first-image.jpg",
+                "src": "course/en/images/c-05-1.jpg",
                 "alt": "",
                 "title": ""
             }
@@ -39,7 +39,7 @@
         {
             "_shouldBeSelected": true,
             "_graphic": {
-                "src": "assets/second-image.jpg",
+                "src": "course/en/images/c-05-2.jpg",
                 "alt": "",
                 "title": ""
             }
@@ -47,7 +47,7 @@
         {
             "_shouldBeSelected": false,
             "_graphic": {
-                "src": "assets/third-image.jpg",
+                "src": "course/en/images/c-05-3.jpg",
                 "alt": "",
                 "title": ""
             }
@@ -55,7 +55,7 @@
         {
             "_shouldBeSelected": true,
             "_graphic": {
-                "src": "assets/fourth-image.jpg",
+                "src": "course/en/images/c-05-4.jpg",
                 "alt": "",
                 "title": ""
             }
@@ -63,7 +63,7 @@
         {
             "_shouldBeSelected": false,
             "_graphic": {
-                "src": "assets/fifth-image.jpg",
+                "src": "course/en/images/c-05-5.jpg",
                 "alt": "",
                 "title": ""
             }
