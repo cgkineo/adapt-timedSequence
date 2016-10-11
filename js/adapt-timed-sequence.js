@@ -1,4 +1,3 @@
-
 define(function(require) {
 
 	var QuestionView = require("coreViews/questionView");
@@ -13,13 +12,16 @@ define(function(require) {
 
 		preRender:function(){
 			QuestionView.prototype.preRender.apply(this);
-			this.listenTo(Adapt, "device:changed", this.onDeviceChanged);
-			this.listenTo(Adapt, "device:resize", this.onDeviceResized);
+
+			_.bindAll(this, "onWidgetImageReady", "onTimerInterval", "onQuestionComplete", "updateSequence");
+
+			this.listenTo(Adapt, "device:changed", this.setupLayout);
+			this.listenTo(Adapt, "device:resize", this.setupLayout);
 		},
 
 		postRender: function() {
 			QuestionView.prototype.postRender.apply(this);
-			this.$(".timed-sequence-widget").imageready(_.bind(this.onWidgetImageReady, this));
+			this.$(".timed-sequence-widget").imageready(this.onWidgetImageReady);
 		},
 
 		setupLayout: function() {
@@ -29,7 +31,7 @@ define(function(require) {
 		},
 
 		setupSequenceIndicators: function() {
-			var itemsLength = this.model.get("_items").length
+			var itemsLength = this.model.get("_items").length;
 			this.$(".sequence-indicator").css("width", (100/itemsLength) + "%");
 		},
 
@@ -39,13 +41,13 @@ define(function(require) {
 				_currentStageIndex: 0,
 				_lastStageAnswered: -1,
 				_correctAnswers: 0,
-				_incorrectAnswers: 0,
+				_incorrectAnswers: 0
 			});
 		},
 
 		startTimer: function() {
 			var timerInterval = this.model.get("_timerInterval")*1000;
-			this.timer = setInterval(_.bind(this.onTimerInterval,this), timerInterval);
+			this.timer = setInterval(this.onTimerInterval, timerInterval);
 		},
 
 		stopTimer: function() {
@@ -71,7 +73,7 @@ define(function(require) {
 
 		endCurrentStage: function() {
 			var $indicator = this.$(".sequence-indicator").eq(this.model.get("_currentStageIndex"));
-			$indicator.children(".sequence-indicator-inner").stop().animate({ width:"100%" }, 500, _.bind(this.updateSequence, this));
+			$indicator.children(".sequence-indicator-inner").stop().animate({ width:"100%" }, 500, this.updateSequence);
 		},
 
 		endSequence: function() {
@@ -79,7 +81,7 @@ define(function(require) {
 			this.$(".sequence-state-container").addClass("complete");
 			this.$(".sequence-answer-button").removeClass("show");
 			this.$(".sequence-complete-button").addClass("show");
-			this.$(".sequence-state-container").velocity("reverse", _.bind(this.onQuestionComplete, this));
+			this.$(".sequence-state-container").velocity("reverse", this.onQuestionComplete);
 		},
 
 		markAnswer: function(index) {
@@ -146,10 +148,6 @@ define(function(require) {
 		/**
 		* Event handling
 		*/
-
-		onDeviceChanged: function() { this.setupLayout(); },
-		onDeviceResized: function() { this.setupLayout(); },
-
 		onWidgetImageReady: function() {
 			this.resetData();
 			this.setupLayout();
@@ -190,8 +188,11 @@ define(function(require) {
 		onTimerInterval: function() {
 			this.updateSequence();
 		}
+	},{
+		template: "timed-sequence"
 	});
 
 	Adapt.register("timed-sequence", TimedSequence);
+
 	return TimedSequence;
 });
