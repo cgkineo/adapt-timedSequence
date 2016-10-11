@@ -15,8 +15,7 @@ define(function(require) {
 
 			_.bindAll(this, "onWidgetImageReady", "onTimerInterval", "onQuestionComplete", "updateSequence");
 
-			this.listenTo(Adapt, "device:changed", this.setupLayout);
-			this.listenTo(Adapt, "device:resize", this.setupLayout);
+			this.listenTo(Adapt, "device:changed device:resize", this.setupLayout);
 		},
 
 		postRender: function() {
