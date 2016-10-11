@@ -1,0 +1,252 @@
+{
+    "type":"object",
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://jsonschema.net",
+    "$ref": "http://localhost/plugins/content/component/model.schema",
+    "globals": {
+        "ariaRegion": {
+            "type": "string",
+            "required": true,
+            "default": "This component is a timed sequence. It is not appropriate for use with a screen reader.",
+            "inputType": "Text",
+            "validators": []
+        }
+    },
+    "properties":{
+        "_supportedLayout": {
+            "type": "string",
+            "required": true,
+            "enum": ["full-width", "half-width", "both"],
+            "default": "both",
+            "editorOnly": true
+        },
+        "instruction": {
+            "type": "string",
+            "required": false,
+            "default": "",
+            "inputType": "Text",
+            "validators": [],
+            "help": "This is the instruction text"
+        },
+        "_questionWeight": {
+            "type":"number",
+            "required":false,
+            "default": 1,
+            "title": "Question Weight",
+            "inputType": "Number",
+            "validators": ["number"],
+            "help": "How much this question is worth"
+        },
+        "_timerInterval": {
+            "type":"number",
+            "required":false,
+            "default": 3,
+            "title": "Timer interval",
+            "inputType": "Number",
+            "validators": ["number"],
+            "help": "Timer interval in seconds"
+        },
+        "_answerLeniency": {
+            "type":"number",
+            "required":false,
+            "default": 1,
+            "title": "Answer leniency",
+            "inputType": "Number",
+            "validators": ["number"],
+            "help": "How many mistakes the user is allowed to make"
+        },
+        "_startGraphic": {
+            "type":"object",
+            "required":true,
+            "title": "Start Graphic",
+            "properties":{
+                "alt": {
+                    "type":"string",
+                    "required":false,
+                    "default": "",
+                    "title": "Alternative Text",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The alternative text for this image",
+                    "translatable": true
+                },
+                "title": {
+                    "type":"string",
+                    "required":false,
+                    "default": "",
+                    "title": "Title Text",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The title text for this image",
+                    "translatable": true
+                },
+                "src": {
+                    "type":"string",
+                    "required":true,
+                    "default": "",
+                    "inputType": "Asset:image",
+                    "validators": ["required"],
+                    "help": "The start image"
+                }
+            }
+        },
+        "_endGraphic": {
+            "type":"object",
+            "required":true,
+            "title": "End Graphic",
+            "properties":{
+                "alt": {
+                    "type":"string",
+                    "required":false,
+                    "default": "",
+                    "title": "Alternative Text",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The alternative text for this image",
+                    "translatable": true
+                },
+                "title": {
+                    "type":"string",
+                    "required":false,
+                    "default": "",
+                    "title": "Title Text",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The title text for this image",
+                    "translatable": true
+                },
+                "src": {
+                    "type":"string",
+                    "required":true,
+                    "default": "",
+                    "inputType": "Asset:image",
+                    "validators": ["required"],
+                    "help": "The end image"
+                }
+            }
+        },
+        "_items": {
+            "type":"array",
+            "required":true,
+            "title": "Items",
+            "items": {
+                "type":"object",
+                "required":true,
+                "properties":{
+                    "_graphic": {
+                        "type":"object",
+                        "required":true,
+                        "title": "Graphic",
+                        "properties":{
+                            "src": {
+                                "type":"string",
+                                "required":true,
+                                "default": "",
+                                "inputType": "Asset:image",
+                                "validators": [],
+                                "help": "Image for this item"
+                            },
+                            "alt": {
+                                "type":"string",
+                                "required":false,
+                                "default": "",
+                                "inputType": "Text",
+                                "validators": [],
+                                "help": "Alternative text for this item's image",
+                                "translatable": true
+                            },
+                            "title": {
+                                "type":"string",
+                                "required":false,
+                                "default": "",
+                                "inputType": "Text",
+                                "validators": [],
+                                "help": "Title text for this item's image",
+                                "translatable": true
+                            }
+                        }
+                    },
+                    "_shouldBeSelected": {
+                        "type":"boolean",
+                        "required":true,
+                        "default": true,
+                        "title": "Should Be Selected",
+                        "inputType": {"type": "Boolean", "options": [true, false]},
+                        "validators": [],
+                        "help": "Set this item to 'true' if this is one of the correct answers"
+                    }
+                }
+            }
+        },
+        "_feedback": {
+            "type":"object",
+            "required":true,
+            "title": "Feedback",
+            "properties":{
+                "correct": {
+                    "type":"string",
+                    "required":true,
+                    "default": "",
+                    "title": "Correct",
+                    "inputType": "TextArea",
+                    "validators": ["required"],
+                    "help": "Correct feedback for this question",
+                    "translatable": true
+                },
+                "_incorrect": {
+                    "type":"object",
+                    "required":true,
+                    "title": "Incorrect Feedback",
+                    "properties":{
+                        "final": {
+                            "type":"string",
+                            "required": true,
+                            "default": "",
+                            "title": "Incorrect Final",
+                            "inputType": "TextArea",
+                            "validators": ["required"],
+                            "help": "Incorrect feedback for the final attempt",
+                            "translatable": true
+                        },
+                        "notFinal": {
+                            "type":"string",
+                            "required": false,
+                            "default": "",
+                            "title": "Incorrect Not Final",
+                            "inputType": "TextArea",
+                            "validators": [],
+                            "help": "Incorrect feedback for any attempt apart from the last attempt",
+                            "translatable": true
+                        }
+                    }
+                },
+                "_partlyCorrect": {
+                    "type":"object",
+                    "required":false,
+                    "properties":{
+                        "final": {
+                            "type":"string",
+                            "required": false,
+                            "default": "",
+                            "title": "Partly Correct Final",
+                            "inputType": "TextArea",
+                            "validators": [],
+                            "help": "Partly correct feedback for the final attempt",
+                            "translatable": true
+                        },
+                        "notFinal": {
+                            "type":"string",
+                            "required": false,
+                            "default": "",
+                            "title": "Partly Correct Not Final",
+                            "inputType": "TextArea",
+                            "validators": [],
+                            "help": "Partly correct feedback for any attempt apart from the last attempt",
+                            "translatable": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
