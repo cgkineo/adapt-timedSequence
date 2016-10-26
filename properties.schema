@@ -125,6 +125,43 @@
                 }
             }
         },
+        "_controls": {
+            "type":"object",
+            "required":true,
+            "title": "Controls",
+            "properties":{
+                "start": {
+                    "type":"string",
+                    "required":false,
+                    "default": "Start",
+                    "title": "Start Button Label",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The start button text",
+                    "translatable": true
+                },
+                "answer": {
+                    "type":"string",
+                    "required":false,
+                    "default": "",
+                    "title": "Answer Button Label",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The answer button text",
+                    "translatable": true
+                },
+                "complete": {
+                    "type":"string",
+                    "required":false,
+                    "default": "Completed!",
+                    "title": "Complete Button Label",
+                    "inputType": "Text",
+                    "validators": [],
+                    "help": "The finish button text",
+                    "translatable": true
+                }
+            }
+        },
         "_items": {
             "type":"array",
             "required":true,
